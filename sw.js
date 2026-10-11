@@ -1,4 +1,4 @@
-const CACHE = 'kakeibo-shell-v2';
+const CACHE = 'kakeibo-shell-v3';
 const SHELL = ['./', './index.html', './manifest.webmanifest', './icon-192.png', './icon-512.png'];
 
 self.addEventListener('install', e => {
@@ -24,6 +24,7 @@ self.addEventListener('fetch', e => {
         caches.open(CACHE).then(c => c.put(e.request, copy));
         return res;
       })
-      .catch(() => caches.match(e.request).then(r => r || caches.match('./index.html')))
+      .catch(() => caches.match(e.request, { ignoreSearch: true })
+        .then(r => r || caches.match('./index.html')))
   );
 });

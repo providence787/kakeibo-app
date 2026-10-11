@@ -1,7 +1,8 @@
 {
   "name": "家計ログ",
   "short_name": "家計ログ",
-  "start_url": "./",
+  "id": "./",
+  "start_url": "./?source=pwa",
   "scope": "./",
   "display": "standalone",
   "orientation": "portrait",
