@@ -9,31 +9,33 @@
 <link rel="icon" href="icon-192.png">
 <link rel="apple-touch-icon" href="icon-192.png">
 <style>
-  html,body{margin:0;height:100%;background:#f5f5f7;overflow:hidden}
-  iframe{position:fixed;inset:0;width:100%;height:100%;border:0;background:#f5f5f7}
-  #offline{display:none;font-family:system-ui,sans-serif;padding:40px 20px;text-align:center;color:#555}
-  body.off iframe{display:none}
-  body.off #offline{display:block}
+  html,body{margin:0;height:100%;background:#f5f5f7;font-family:system-ui,sans-serif;color:#555}
+  .box{padding:60px 20px;text-align:center}
+  a.btn{display:inline-block;margin-top:16px;padding:12px 24px;background:#1a73e8;color:#fff;border-radius:10px;text-decoration:none}
 </style>
 </head>
 <body>
-<iframe id="app" title="家計ログ" allow="clipboard-write"></iframe>
-<div id="offline">
-  <p>オフラインのため開けません。<br>電波のある場所で再度開いてください。</p>
-  <p><button onclick="location.reload()">再読み込み</button></p>
+<div class="box" id="msg">
+  <p>家計ログを開いています…</p>
+  <a class="btn" id="open" href="#">開かない場合はこちら</a>
 </div>
 <script>
   const GAS_URL = 'https://script.google.com/macros/s/AKfycbwbi8TNKteRQBujdOaZvZRtCQtlKJZEtEbp7TfLovJDRUb99RmmQMZNATtWreMeUcAZ/exec';
 
-  if (navigator.onLine) {
-    document.getElementById('app').src = GAS_URL;
-  } else {
-    document.body.classList.add('off');
-  }
-  window.addEventListener('online', () => location.reload());
+  document.getElementById('open').href = GAS_URL;
 
   if ('serviceWorker' in navigator) {
     navigator.serviceWorker.register('sw.js');
+  }
+
+  if (navigator.onLine) {
+    // 履歴に残さず移動（戻るボタンでこの画面に戻らないように）
+    location.replace(GAS_URL);
+  } else {
+    document.getElementById('msg').innerHTML =
+      '<p>オフラインのため開けません。<br>電波のある場所で再度開いてください。</p>' +
+      '<p><a class="btn" href="./">再読み込み</a></p>';
+    window.addEventListener('online', () => location.replace(GAS_URL));
   }
 </script>
 </body>
